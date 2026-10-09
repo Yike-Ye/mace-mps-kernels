@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mace-mps-kernels"
+version = "0.1.0"
+description = "Fused Metal kernels for MACE inference on Apple-silicon GPUs (PyTorch MPS)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = ["torch>=2.6", "mace-torch>=0.3.14", "e3nn", "numpy"]
+
+[project.optional-dependencies]
+test = ["pytest", "ase"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
