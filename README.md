@@ -36,8 +36,6 @@ python -m pip install ".[test]"
 python -m pytest -q tests
 ```
 
-The repository is currently private, so cloning requires a GitHub account that has been granted access.
-
 ## Usage
 
 ```python
