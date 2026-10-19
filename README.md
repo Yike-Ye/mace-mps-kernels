@@ -2,6 +2,11 @@
 
 Fused Metal kernels for [MACE](https://github.com/ACEsuit/mace) **inference** on Apple-silicon GPUs (PyTorch `mps`).
 
+> **Compatibility status:** version 0.1.0 targets the legacy MACE 0.3.x model implementation and has been tested with
+> `mace-torch==0.3.16` and `torch==2.14.0`. It patches a loaded 0.3.16 model in memory; it is not yet an implementation
+> of the developing Reforge/v1 `KernelBackend` protocol. The Metal kernels are intended to sit behind that protocol
+> once its interface stabilises.
+
 On Apple GPUs MACE runs on the generic e3nn path, where one equivariant tensor product is split into hundreds of small
 GPU dispatches and most of an energy + force call is spent in the backward pass. This package replaces the two
 operations that dominate that time with generated, fused Metal kernels (forward and first-order backward):
@@ -13,6 +18,25 @@ operations that dominate that time with generated, fused Metal kernels (forward 
 
 Everything else (embeddings, radial MLP, linears, readouts) stays on the original PyTorch path. The model file is not
 modified; the patch is applied in memory.
+
+## Installation
+
+Clone the repository and install it into the same environment as MACE:
+
+```bash
+git clone https://github.com/Yike-Ye/mace-mps-kernels.git
+cd mace-mps-kernels
+python -m pip install .
+```
+
+For development and tests:
+
+```bash
+python -m pip install ".[test]"
+python -m pytest -q tests
+```
+
+The repository is currently private, so cloning requires a GitHub account that has been granted access.
 
 ## Usage
 
@@ -72,7 +96,9 @@ relaxation), which is slow and makes memory grow on the e3nn path; long runs sho
 ## Tests
 
 ```bash
-python tests/test_kernels.py          # or: pytest tests/
+python -m pytest -q tests
+# or, without pytest's runner:
+python tests/test_kernels.py
 ```
 
 Random MACE models + synthetic Pt(100)/adsorbate structures: agreement with e3nn for four architectures, rotation
@@ -91,7 +117,8 @@ equivariance, the double-backward guard, and fallback for unsupported blocks. Ne
 ## Related
 
 MACE is developing a kernel-backend protocol (ACEsuit/mace #1560, #1567). This package currently patches models
-in place; it is intended to become a backend once that interface is available.
+in place against the legacy 0.3.16 implementation; it is intended to become a Reforge/v1 backend once that interface
+is available and sufficiently stable.
 
 ## License
 

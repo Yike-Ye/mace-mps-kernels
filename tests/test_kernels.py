@@ -86,6 +86,7 @@ def test_unsupported_block_is_skipped():
 
 
 if __name__ == '__main__':
+    failures = []
     for name, fn in list(globals().items()):
         if name.startswith('test_') and callable(fn):
             try:
@@ -93,3 +94,6 @@ if __name__ == '__main__':
                 print(f'PASS {name}')
             except Exception as e:                     # noqa: BLE001
                 print(f'FAIL {name}: {type(e).__name__}: {e}')
+                failures.append(name)
+    if failures:
+        raise SystemExit(f'{len(failures)} test(s) failed: {", ".join(failures)}')

@@ -9,7 +9,9 @@ description = "Fused Metal kernels for MACE inference on Apple-silicon GPUs (PyT
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
-dependencies = ["torch>=2.6", "mace-torch>=0.3.14", "e3nn", "numpy"]
+# The current patching API targets the legacy 0.3.x model layout.  Reforge/v1
+# uses a separate KernelBackend protocol and is not covered by this release.
+dependencies = ["torch>=2.6", "mace-torch>=0.3.16,<0.4", "e3nn", "numpy"]
 
 [project.optional-dependencies]
 test = ["pytest", "ase"]
